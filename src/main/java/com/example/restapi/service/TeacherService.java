@@ -1,43 +1,46 @@
 package com.example.restapi.service;
 
-import com.example.restapi.dao.ITeacherDAO;
+import com.example.restapi.dao.TeacherRepository;
 import com.example.restapi.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherService implements ITeacherService {
 
-    private ITeacherDAO teacherDAO;
+    private TeacherRepository teacherRepository;
 
     @Autowired
-    public TeacherService(ITeacherDAO teacherDAO) {
-        this.teacherDAO = teacherDAO;
+    public TeacherService(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
     public List<Teacher> findAll() {
-        return teacherDAO.findAll();
+        return teacherRepository.findAll();
     }
 
     @Override
     public Teacher findById(int id) {
-        return teacherDAO.findById(id);
+        Optional<Teacher> result = teacherRepository.findById(id);
+        Teacher teacher = null;
+        if (result.isPresent()) teacher = result.get();
+        else throw new RuntimeException("Did not find teacher id - " + id);
+        return teacher;
     }
 
     @Override
-    @Transactional
-    public Teacher update(Teacher teacher) {
-        return teacherDAO.update(teacher);
+    public Teacher save(Teacher teacher) {
+        return teacherRepository.save(teacher);
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
-        teacherDAO.deleteById(id);
+        teacherRepository.deleteById(id);
     }
 
 }

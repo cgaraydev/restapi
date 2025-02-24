@@ -8,6 +8,6 @@ public interface ITeacherService {
 
     List<Teacher> findAll();
     Teacher findById(int id);
-    Teacher update(Teacher teacher);
+    Teacher save(Teacher teacher);
     void deleteById(int id);
 }
